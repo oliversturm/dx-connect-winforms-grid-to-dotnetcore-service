@@ -41,7 +41,7 @@ The backend project is called *DataService* and it was created using the standar
 
 The second handler, at the URL /data/OrderItems, accepts several optional parameters to support the `skip`, `take`, and `sort` features. The code queries data from the Entity Framework Core database context, and uses the standard `IQueryable<T>` based helpers to implement data shaping functionality. The `TotalCount` field is returned together with the data and is used on the client side to determine how much data is available to query.
 
-```
+```csharp
 app.MapGet("/data/OrderItems", async (
   DataServiceDbContext dbContext,
   int skip = 0, int take = 20,
@@ -71,7 +71,7 @@ In the `MainForm` of the Windows Forms application, the DevExpress GridControl c
 
 In this example, data loaded from the backend is encoded as JSON. The type `DataFetchResult` models the structure that is published by the backend endpoint, including the `TotalCount` property:
 
-```
+```csharp
 public class DataFetchResult {
   public List<OrderItem> Items { get; set; } = null!;
   public int TotalCount { get; set; }
@@ -80,7 +80,7 @@ public class DataFetchResult {
 
 The `GetRowsAsync` method handles retrieved data. The method is called both on initial load (from the `ConfigurationChanged` handler) and on further loads (from the `MoreRows` handler). The `HttpClient` is used to retrieve data, passing arguments as URL parameters for skip, take, and sorting properties. Results are deserialized from JSON and returned together with the `moreRowsAvailable` flag:
 
-```
+```csharp
 public Task<VirtualServerModeRowsTaskResult>
   GetRowsAsync(VirtualServerModeRowsEventArgs e)
 {
