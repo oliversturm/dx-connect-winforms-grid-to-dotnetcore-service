@@ -14,12 +14,12 @@
 * [.NET SDK 8.0+](https://dotnet.microsoft.com/en-us/download/dotnet)
 * Download and run our [Unified Component Installer](https://www.devexpress.com/products/try/) or [add your personal DevExpress NuGet feed URL](https://docs.devexpress.com/GeneralInformation/116042/installation/install-devexpress-controls-using-nuget-packages/obtain-your-nuget-feed-url) to Visual Studio NuGet feeds.
     
-    > We recommend that you select all products when you run the DevExpress installer. It will register local NuGet package sources and item / project templates. You can uninstall unnecessary components later.
+    > We recommend that you select all products when you run the DevExpress installer. Doing so will register local NuGet package sources and item / project templates. You can uninstall unnecessary components at a later time.
 
 
 ## Getting Started
 
-1.	Open *NetCoreServiceAll.sln*. [Register a DevExpress NuGet feed](https://docs.devexpress.com/GeneralInformation/116698/nuget/setup-visual-studios-nuget-package-manager) in the Visual Studio IDE. Skip this step if you have already registered the DevExpress NuGet feed.
+1.	Open *NetCoreServiceAll.sln*. [Register a DevExpress NuGet feed](https://docs.devexpress.com/GeneralInformation/116698/nuget/setup-visual-studios-nuget-package-manager) in the Visual Studio IDE. Skip this step if you have already registered your DevExpress NuGet feed.
 2.	Restore NuGet packages in the solution:
 
     ![Restore NuGet Packages in the Solution](restore-nuget-packages.png)
@@ -40,7 +40,7 @@
 
 The backend project is called *DataService* and it was created using the standard ASP.NET Core WebAPI template. There are two endpoint handlers in the service, one to generate some test data and the other to query data.
 
-The second handler, at the URL /data/OrderItems, accepts several optional parameters to support the `skip`, `take`, and `sort` features. The code queries data from the Entity Framework Core database context, and uses the standard `IQueryable<T>` based helpers to implement data shaping functionality. The `TotalCount` field is returned together with the data and is used on the client side to determine how much data is available to query.
+The second handler, at the URL /data/OrderItems, accepts several optional parameters to support `skip`, `take`, and `sort` features. The code queries data from the Entity Framework Core database context and uses the standard `IQueryable<T>` based helpers to implement data shaping functionality. The `TotalCount` field is returned together with the data and is used on the client side to determine the total amount of data available for the request.
 
 ```csharp
 app.MapGet("/data/OrderItems", async (
@@ -70,7 +70,7 @@ In the `MainForm` of the Windows Forms application, the DevExpress GridControl c
 * `ConfigurationChanged` - Fires when the grid changes some relevant part of its runtime configuration in response to user interaction (for example, when the user clicks a column header to apply sorting).
 * `MoreRows` - Fires when an initial fetch operation returns a result, which indicates that more data is available. In this case, the grid attempts to retrieve more data rows if and when the user scrolls to the bottom of the currently loaded set of data.
 
-In this example, data loaded from the backend is encoded as JSON. The type `DataFetchResult` models the structure that is published by the backend endpoint, including the `TotalCount` property:
+In this example, the data loaded from the backend is encoded as JSON. The type `DataFetchResult` models the structure of the response provided by the backend endpoint, including the `TotalCount` property:
 
 ```csharp
 public class DataFetchResult {
@@ -79,7 +79,7 @@ public class DataFetchResult {
 }
 ```
 
-The `GetRowsAsync` method handles retrieved data. The method is called both on initial load (from the `ConfigurationChanged` handler) and on further loads (from the `MoreRows` handler). The `HttpClient` is used to retrieve data, passing arguments as URL parameters for skip, take, and sorting properties. Results are deserialized from JSON and returned together with the `moreRowsAvailable` flag:
+The `GetRowsAsync` method handles retrieved data. The method is invoked during the initial load (from the `ConfigurationChanged` handler) and subsequent loads (from the `MoreRows` handler). Data is fetched using `HttpClient`, with skip, take, and sorting properties passed as URL parameters. The results are deserialized from JSON and returned along with the `moreRowsAvailable` flag:
 
 ```csharp
 public Task<VirtualServerModeRowsTaskResult>
