@@ -4,7 +4,7 @@
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 [![](https://img.shields.io/badge/💬_Leave_Feedback-feecdd?style=flat-square)](#does-this-example-address-your-development-requirementsobjectives)
 <!-- default badges end -->
-# Connect a WinForms Data Grid to a .NET Core Service
+# Connect the DevExpress WinForms Data Grid to a .NET Core Service
 
 > Please read [the blog post](https://community.devexpress.com/blogs/news/archive/2024/08/21/connect-a-winforms-data-grid-to-a-net-core-service.aspx) for details about this sample.
 
