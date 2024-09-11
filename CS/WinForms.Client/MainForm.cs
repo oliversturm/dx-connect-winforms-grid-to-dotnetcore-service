@@ -1,7 +1,6 @@
 using DevExpress.XtraEditors;
-using DevExpress.XtraGrid;
+using DevExpress.XtraGrid.Views.Base;
 using DevExpress.XtraGrid.Views.Grid;
-using System.ComponentModel;
 
 namespace WinForms.Client
 {
@@ -28,65 +27,42 @@ namespace WinForms.Client
             }
         }
 
-        private BindingList<OrderItem> loadedOrderItems = new();
-        private void virtualServerModeSource_AcquireInnerList(object sender, DevExpress.Data.VirtualServerModeAcquireInnerListEventArgs e)
-        {
-            e.InnerList = loadedOrderItems;
-        }
-
-        private async void gridView1_RowUpdated(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
+        private async void gridView1_DoubleClick(object sender, EventArgs e)
         {
             if (sender is GridView view)
             {
-                if (e.RowHandle == GridControl.NewItemRowHandle)
+                if (view.FocusedRowObject is OrderItem oi)
                 {
-                    if (e.Row is OrderItem o)
+                    var editResult = EditForm.EditItem(oi);
+                    if (editResult.changesSaved)
                     {
-                        // The persisted item includes any server-generated values such as 
-                        // primary keys
-                        var persistedItem = await DataServiceClient.CreateOrderItemAsync(o);
-                        if (persistedItem != null)
-                        {
-                            // You can update the local row with that information, but note
-                            // that the row may not appear in the intended location because
-                            // the client does not apply sorting to the local data.
-                            o.Id = persistedItem.Id;
-                        }
-
-                        // Refresh the grid to reflect the changes -- this invokes a server roundtrip
+                        await DataServiceClient.UpdateOrderItemAsync(editResult.item);
                         view.RefreshData();
                     }
                 }
-                else
+            }
+        }
+
+        private async void addItemButton_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (gridControl.FocusedView is ColumnView view)
+            {
+                var createResult = EditForm.CreateItem();
+                if (createResult.changesSaved)
                 {
-                    await DataServiceClient.UpdateOrderItemAsync((OrderItem)e.Row);
+                    await DataServiceClient.CreateOrderItemAsync(createResult.item!);
+                    view.RefreshData();
                 }
             }
         }
 
-        private void gridView1_InitNewRow(object sender, DevExpress.XtraGrid.Views.Grid.InitNewRowEventArgs e)
+        private async void deleteItemButton_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if (sender is GridView view)
+            if (gridControl.FocusedView is ColumnView view &&
+                view.GetFocusedRow() is OrderItem orderItem)
             {
-                view.SetRowCellValue(e.RowHandle, view.Columns["OrderDate"], DateTime.Now);
-            }
-        }
-
-        private void gridView1_RowEditCanceled(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
-        {
-            loadedOrderItems.Remove((OrderItem)e.Row);
-        }
-
-        private async void gridView1_RowDeleting(object sender, DevExpress.Data.RowDeletingEventArgs e)
-        {
-            var result = await DataServiceClient.DeleteOrderItemAsync(((OrderItem)e.Row).Id);
-            if (result)
-            {
-                loadedOrderItems.Remove((OrderItem)e.Row);
-            }
-            else
-            {
-                e.Cancel = true;
+                await DataServiceClient.DeleteOrderItemAsync(orderItem.Id);
+                view.RefreshData();
             }
         }
     }
