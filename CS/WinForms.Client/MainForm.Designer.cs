@@ -26,7 +26,6 @@
         {
             components = new System.ComponentModel.Container();
             gridControl = new DevExpress.XtraGrid.GridControl();
-            virtualServerModeSource = new DevExpress.Data.VirtualServerModeSource(components);
             gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             colId = new DevExpress.XtraGrid.Columns.GridColumn();
             colProductName = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -34,42 +33,40 @@
             colQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
             colDiscount = new DevExpress.XtraGrid.Columns.GridColumn();
             colOrderDate = new DevExpress.XtraGrid.Columns.GridColumn();
+            virtualServerModeSource = new DevExpress.Data.VirtualServerModeSource(components);
             MainFormlayoutControl1ConvertedLayout = new DevExpress.XtraLayout.LayoutControl();
             layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             gridControl1item = new DevExpress.XtraLayout.LayoutControlItem();
             barManager = new DevExpress.XtraBars.BarManager(components);
             bar1 = new DevExpress.XtraBars.Bar();
             addItemButton = new DevExpress.XtraBars.BarButtonItem();
+            deleteItemButton = new DevExpress.XtraBars.BarButtonItem();
+            bar2 = new DevExpress.XtraBars.Bar();
+            logOutItem = new DevExpress.XtraBars.BarButtonItem();
             barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             barDockControlRight = new DevExpress.XtraBars.BarDockControl();
-            deleteItemButton = new DevExpress.XtraBars.BarButtonItem();
+            svgImageCollection = new DevExpress.Utils.SvgImageCollection(components);
             ((System.ComponentModel.ISupportInitialize)gridControl).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)virtualServerModeSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)virtualServerModeSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)MainFormlayoutControl1ConvertedLayout).BeginInit();
             MainFormlayoutControl1ConvertedLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)layoutControlGroup1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridControl1item).BeginInit();
             ((System.ComponentModel.ISupportInitialize)barManager).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)svgImageCollection).BeginInit();
             SuspendLayout();
             // 
             // gridControl
             // 
-            gridControl.DataSource = virtualServerModeSource;
             gridControl.Location = new Point(12, 12);
             gridControl.MainView = gridView1;
             gridControl.Name = "gridControl";
             gridControl.Size = new Size(776, 406);
             gridControl.TabIndex = 0;
             gridControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1 });
-            // 
-            // virtualServerModeSource
-            // 
-            virtualServerModeSource.RowType = typeof(OrderItem);
-            virtualServerModeSource.ConfigurationChanged += VirtualServerModeSource_ConfigurationChanged;
-            virtualServerModeSource.MoreRows += VirtualServerModeSource_MoreRows;
             // 
             // gridView1
             // 
@@ -125,6 +122,12 @@
             colOrderDate.Visible = true;
             colOrderDate.VisibleIndex = 5;
             // 
+            // virtualServerModeSource
+            // 
+            virtualServerModeSource.RowType = typeof(OrderItem);
+            virtualServerModeSource.ConfigurationChanged += VirtualServerModeSource_ConfigurationChanged;
+            virtualServerModeSource.MoreRows += VirtualServerModeSource_MoreRows;
+            // 
             // MainFormlayoutControl1ConvertedLayout
             // 
             MainFormlayoutControl1ConvertedLayout.Controls.Add(gridControl);
@@ -155,14 +158,14 @@
             // 
             // barManager
             // 
-            barManager.Bars.AddRange(new DevExpress.XtraBars.Bar[] { bar1 });
+            barManager.Bars.AddRange(new DevExpress.XtraBars.Bar[] { bar1, bar2 });
             barManager.DockControls.Add(barDockControlTop);
             barManager.DockControls.Add(barDockControlBottom);
             barManager.DockControls.Add(barDockControlLeft);
             barManager.DockControls.Add(barDockControlRight);
             barManager.Form = this;
-            barManager.Items.AddRange(new DevExpress.XtraBars.BarItem[] { addItemButton, deleteItemButton });
-            barManager.MaxItemId = 2;
+            barManager.Items.AddRange(new DevExpress.XtraBars.BarItem[] { addItemButton, deleteItemButton, logOutItem });
+            barManager.MaxItemId = 3;
             // 
             // bar1
             // 
@@ -179,6 +182,29 @@
             addItemButton.Id = 0;
             addItemButton.Name = "addItemButton";
             addItemButton.ItemClick += addItemButton_ItemClick;
+            // 
+            // deleteItemButton
+            // 
+            deleteItemButton.Caption = "Delete Focused Item";
+            deleteItemButton.Id = 1;
+            deleteItemButton.Name = "deleteItemButton";
+            deleteItemButton.ItemClick += deleteItemButton_ItemClick;
+            // 
+            // bar2
+            // 
+            bar2.BarName = "Custom 3";
+            bar2.DockCol = 1;
+            bar2.DockRow = 0;
+            bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
+            bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(logOutItem) });
+            bar2.Text = "Custom 3";
+            // 
+            // logOutItem
+            // 
+            logOutItem.Caption = "Log Out";
+            logOutItem.Id = 2;
+            logOutItem.Name = "logOutItem";
+            logOutItem.ItemClick += logOutItem_ItemClick;
             // 
             // barDockControlTop
             // 
@@ -212,12 +238,10 @@
             barDockControlRight.Manager = barManager;
             barDockControlRight.Size = new Size(0, 430);
             // 
-            // deleteItemButton
+            // svgImageCollection
             // 
-            deleteItemButton.Caption = "Delete Focused Item";
-            deleteItemButton.Id = 1;
-            deleteItemButton.Name = "deleteItemButton";
-            deleteItemButton.ItemClick += deleteItemButton_ItemClick;
+            svgImageCollection.ImageSize = new Size(64, 64);
+            svgImageCollection.Add("bo_security_permission", "image://svgimages/business objects/bo_security_permission.svg");
             // 
             // MainForm
             // 
@@ -232,13 +256,14 @@
             Name = "MainForm";
             Text = "MainForm";
             ((System.ComponentModel.ISupportInitialize)gridControl).EndInit();
-            ((System.ComponentModel.ISupportInitialize)virtualServerModeSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)virtualServerModeSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)MainFormlayoutControl1ConvertedLayout).EndInit();
             MainFormlayoutControl1ConvertedLayout.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)layoutControlGroup1).EndInit();
             ((System.ComponentModel.ISupportInitialize)gridControl1item).EndInit();
             ((System.ComponentModel.ISupportInitialize)barManager).EndInit();
+            ((System.ComponentModel.ISupportInitialize)svgImageCollection).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -265,5 +290,8 @@
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
         private DevExpress.XtraBars.BarButtonItem addItemButton;
         private DevExpress.XtraBars.BarButtonItem deleteItemButton;
+        private DevExpress.Utils.SvgImageCollection svgImageCollection;
+        private DevExpress.XtraBars.Bar bar2;
+        private DevExpress.XtraBars.BarButtonItem logOutItem;
     }
 }
